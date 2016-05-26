@@ -22,6 +22,12 @@ class Card
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="cards")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     */
+    private $course;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
@@ -65,6 +71,38 @@ class Card
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param mixed $course
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategory()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param int $category
+     */
+    public function setCategory($category)
+    {
+        $this->course = $category;
     }
 
     /**
