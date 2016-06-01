@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Card;
-use AppBundle\Form\CardType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -31,12 +30,31 @@ class CardController extends Controller
     /**
      * Creates a new Card entity.
      *
-     * @Route("/new", name="api_card_new")
-     * @Method({"GET", "POST"})
+     * @Route("/api/cards", name="api_card_new")
+     * @Method({"POST"})
      */
     public function newAction(Request $request)
     {
-        // TODO
+        $body = $request->getContent();
+        $data = json_decode($body, true); //'true' => get an array, not object
+
+        $em = $this->getDoctrine()->getManager();
+
+        // create object ...
+        $card = new Card();
+        $card->setName($data['name']);
+        $card->setAnswer($data['answer']);
+        $card->setQuestion($data['question']);
+        $card->setHint($data['hint']);
+        $card->setPosition(0); // for future use
+        $card->setCourse($em->getRepository('AppBundle:Course')->find($data['course']));
+
+        // ... and save it
+        $em->persist($card);
+        $em->flush();
+
+        // header, body, stats code
+        return new Response($body);
     }
 
     /**

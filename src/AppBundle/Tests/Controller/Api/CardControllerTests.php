@@ -14,21 +14,52 @@ class CardControllerTests extends \PHPUnit_Framework_TestCase
                 'exceptions' => false,
             ]
         ]);
-//        $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', '/api/cards');
-        echo $res->getStatusCode();
-        echo "\n\n";
-        echo $res->getHeaderLine('content-type');
-        echo "\n\n";
-        echo $res->getBody();
 
-        echo "\n\n";
-        
-        $this->assertEquals(200, $res->getStatusCode());
+        $res = $client->request('GET', '/api/cards');
+//        echo $res->getStatusCode();
+//        echo "\n\n";
+//        echo $res->getHeaderLine('content-type');
+//        echo "\n\n";
+//        echo $res->getBody();
+//
+//        echo "\n\n";
+//
+//        $this->assertEquals(200, $res->getStatusCode());
 
 //        $this->assertTrue($res->hasHeader('Location'));
 
         // valid json...
+    }
+
+    public function testPost(){
+        $client = new Client([
+            'base_uri' => 'http://localhost:8000',
+            'default' => [
+                'exceptions' => false,
+            ]
+        ]);
+        
+        $data = [
+            'name' => ' ',
+            'question' => 'question',
+            'answer' => 'answer',
+            'hint' => 'hint',
+            'course' => '2'
+        ];
+        
+        $response = $client->post('/api/cards', [
+            'body' => json_encode($data)
+        ]);
+
+        echo 'response: ';
+        echo $response->getBody();
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+//        $this->assertTrue($res->hasHeader('Location'));
+
+        // valid json...
+
     }
 
 }
