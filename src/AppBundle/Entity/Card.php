@@ -74,7 +74,7 @@ class Card
     }
 
     /**
-     * @return mixed
+     * @return Course
      */
     public function getCourse()
     {
@@ -82,7 +82,7 @@ class Card
     }
 
     /**
-     * @param mixed $course
+     * @param Course $course
      */
     public function setCourse($course)
     {
