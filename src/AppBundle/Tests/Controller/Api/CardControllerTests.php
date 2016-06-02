@@ -54,9 +54,9 @@ class CardControllerTests extends \PHPUnit_Framework_TestCase
         echo 'response: ';
         echo $response->getBody();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(201, $response->getStatusCode());
 
-//        $this->assertTrue($res->hasHeader('Location'));
+        $this->assertTrue($response->hasHeader('Location'));
 
         // valid json...
 

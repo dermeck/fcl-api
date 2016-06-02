@@ -54,7 +54,10 @@ class CardController extends Controller
         $em->flush();
 
         // header, body, stats code
-        return new Response($body);
+        $response = new Response($body, 201);
+        $response->headers->set('Location', 'url-fake');
+
+        return $response;
     }
 
     /**
