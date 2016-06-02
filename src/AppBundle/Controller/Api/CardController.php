@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Form\CardType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -42,18 +43,18 @@ class CardController extends Controller
 
         // create object ...
         $card = new Card();
-        $card->setName($data['name']);
-        $card->setAnswer($data['answer']);
-        $card->setQuestion($data['question']);
-        $card->setHint($data['hint']);
-        $card->setPosition(0); // for future use
-        $card->setCourse($em->getRepository('AppBundle:Course')->find($data['course']));
+
+        // update with data
+        $data['position'] = 0;
+        $courseId = $data['course'];
+        $data['course'] = $em->getRepository('AppBundle:Course')->find($courseId);
+        $form = $this->createForm(CardType::class, $card);
+        $form->submit($data);
 
         // ... and save it
         $em->persist($card);
         $em->flush();
 
-        // header, body, stats code
         $response = new Response($body, 201);
         $response->headers->set('Location', 'url-fake');
 
