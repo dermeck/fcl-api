@@ -54,9 +54,13 @@ class CardController extends Controller
         // ... and save it
         $em->persist($card);
         $em->flush();
+        
+        $location = $this->generateUrl('api_card_show', [
+            'id' => $card->getId()
+        ]);
 
         $response = new Response($body, 201);
-        $response->headers->set('Location', 'url-fake');
+        $response->headers->set('Location', $location);
 
         return $response;
     }
