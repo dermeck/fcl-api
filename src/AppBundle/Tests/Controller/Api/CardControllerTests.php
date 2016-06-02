@@ -15,20 +15,24 @@ class CardControllerTests extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $res = $client->request('GET', '/api/cards');
-//        echo $res->getStatusCode();
-//        echo "\n\n";
-//        echo $res->getHeaderLine('content-type');
-//        echo "\n\n";
-//        echo $res->getBody();
-//
-//        echo "\n\n";
-//
-//        $this->assertEquals(200, $res->getStatusCode());
+        $response = $client->get('/api/cards/1');
+        echo $response->getBody();
 
-//        $this->assertTrue($res->hasHeader('Location'));
-
+        $this->assertEquals(200, $response->getStatusCode());
         // valid json...
+    }
+
+    public function testGet404(){
+        $client = new Client([
+            'base_uri' => 'http://localhost:8000',
+            'default' => [
+                'exceptions' => false,
+            ]
+        ]);
+
+        $response = $client->get('/api/cards/11');
+
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testPost(){

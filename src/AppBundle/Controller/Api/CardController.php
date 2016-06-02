@@ -62,14 +62,36 @@ class CardController extends Controller
     }
 
     /**
-     * Finds and displays a Card entity.
+     * Finds and returns a single Card entity.
      *
-     * @Route("/{id}", name="api_card_show")
+     * @Route("/api/cards/{id}", name="api_card_show")
      * @Method("GET")
      */
-    public function showAction(Card $card)
+    public function showAction($id)
     {
-        // TODO
+        // query for card
+        $card = $this->getDoctrine()
+            ->getRepository('AppBundle:Card')
+            ->find($id);
+
+        if(!$card) {
+            throw $this->createNotFoundException('Card with id: ' . $id . " not found.");
+        }
+
+        // serialize card object
+        $data = [
+            'name' => $card->getName(),
+            'question' => $card->getQuestion(),
+            'answer' => $card->getAnswer(),
+            'hint' => $card->getHint(),
+            'position' => $card->getPosition(),
+            'course' => $card->getCourse()->getId()
+        ];
+
+        $response = new Response(json_encode($data, 200));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 
     /**
