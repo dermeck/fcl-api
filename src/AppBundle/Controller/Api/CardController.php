@@ -47,9 +47,15 @@ class CardController extends Controller
         // update with data
         $data['position'] = 0;
         $courseId = $data['course'];
-        $data['course'] = $em->getRepository('AppBundle:Course')->find($courseId);
+
+        // TODO figure out why forms is not setting course id properly with the following line
+        // instead the course is set manually below
+        // $data['course'] = $em->getRepository('AppBundle:Course')->find($courseId);
+
         $form = $this->createForm(CardType::class, $card);
         $form->submit($data);
+
+        $card->setCourse($em->getRepository('AppBundle:Course')->find($courseId));
 
         // ... and save it
         $em->persist($card);
