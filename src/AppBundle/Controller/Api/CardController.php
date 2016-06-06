@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Form\CardType;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -76,8 +77,11 @@ class CardController extends Controller
             'id' => $card->getId()
         ]);
 
-        $response = new Response($body, 201);
+        $data = $this->serializeCard($card);
+
+        $response = new Response(json_encode($data), 201);
         $response->headers->set('Location', $location);
+        $response->headers->set('Content-type', 'application/json');
 
         return $response;
     }
