@@ -7,7 +7,7 @@ class CardControllerTests extends \PHPUnit_Framework_TestCase
 {
     // call via cli "vendor/bin/phpunit src/AppBundle/Tests/Controller/Api/CardControllerTests.php"
 
-    public function testGet(){
+    public function testGetSingle(){
         $client = new Client([
             'base_uri' => 'http://localhost:8000',
             'default' => [
@@ -16,6 +16,22 @@ class CardControllerTests extends \PHPUnit_Framework_TestCase
         ]);
 
         $response = $client->get('/api/cards/1');
+        echo $response->getBody();
+
+
+        $this->assertEquals(200, $response->getStatusCode());
+        // valid json...
+    }
+
+    public function testGetCollection(){
+        $client = new Client([
+            'base_uri' => 'http://localhost:8000',
+            'default' => [
+                'exceptions' => false,
+            ]
+        ]);
+
+        $response = $client->get('/api/cards');
         echo $response->getBody();
 
 

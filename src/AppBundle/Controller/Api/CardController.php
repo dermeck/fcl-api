@@ -19,13 +19,24 @@ class CardController extends Controller
     /**
      * Lists all Card entities.
      *
-     * @Route("/api/cards", name="api_card_index")
+     * @Route("/api/cards", name="api_card_list")
      * @Method("GET")
      */
-    public function indexAction()
+    public function listAction()
     {
-        // TODO
-        return new Response("Jep!");
+        $cards = $this->getDoctrine()->getRepository('AppBundle:Card')->findAll();
+
+        // init array with root key
+        $data = ['cards' => [ ]];
+
+        foreach ($cards as $card) {
+            $data['cards'][] = $this->serializeCard($card);
+        }
+
+        $response = new Response(json_encode($data, 200));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 
     /**
@@ -87,16 +98,8 @@ class CardController extends Controller
         if(!$card) {
             throw $this->createNotFoundException('Card with id: ' . $id . " not found.");
         }
+        $data = $this->serializeCard($card);
 
-        // serialize card object
-        $data = [
-            'name' => $card->getName(),
-            'question' => $card->getQuestion(),
-            'answer' => $card->getAnswer(),
-            'hint' => $card->getHint(),
-            'position' => $card->getPosition(),
-            'course' => $card->getCourse()->getId()
-        ];
 
         $response = new Response(json_encode($data, 200));
         $response->headers->set('Content-Type', 'application/json');
@@ -124,6 +127,25 @@ class CardController extends Controller
     public function deleteAction(Request $request, Card $card)
     {
         // TODO
+    }
+
+    /**
+     * @param $card
+     * @return array
+     */
+    public function serializeCard(Card $card)
+    {
+        // serialize card object
+            $data = [
+                'name' => $card->getName(),
+                'question' => $card->getQuestion(),
+                'answer' => $card->getAnswer(),
+                'hint' => $card->getHint(),
+                'position' => $card->getPosition(),
+                'course' => $card->getCourse()->getId()
+            ];
+
+        return $data;
     }
 
     /**
