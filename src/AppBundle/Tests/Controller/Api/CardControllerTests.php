@@ -36,25 +36,49 @@ class CardControllerTests extends ApiTestCase
         $em->persist($card);
         $em->flush();
 
+        $card = new Card();
+        $card->setName('TestCard2');
+        $card->setQuestion('question2');
+        $card->setAnswer('answer2');
+        $card->setCourse($course);
+        $card->setHint('hint2‚');
+        $card->setPosition('0');
+        $em->persist($card);
+        $em->flush();
+
         $this->testCardId = $card->getId();
     }
 
     public function testGetSingle(){
         /** @var ResponseInterface $response */
         $response = $this->client->get('/api/cards/' . $this->testCardId);
-        echo $response->getBody();
+//        echo $response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode());
-        // valid json...
+
+        $this->asserter()->assertResponsePropertiesExist($response, array(
+            'question',
+            'answer',
+            'name',
+            'hint',
+            'position'
+        ));
+
+        $this->asserter()->assertResponsePropertyEquals($response, 'question', 'question2');
     }
 
     public function testGetCollection(){
+
         /** @var ResponseInterface $response */
         $response = $this->client->get('/api/cards');
-        echo $response->getBody();
+//        echo $response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode());
-        // valid json...
+
+        $this->asserter()->assertResponsePropertyIsArray($response, 'cards');
+
+        // there should be 2 cards
+        $this->asserter()->assertResponsePropertyCount($response, 'cards', 2);
     }
 
     public function testPost(){
@@ -71,6 +95,16 @@ class CardControllerTests extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
+        $this->asserter()->assertResponsePropertiesExist($response, array(
+            'question',
+            'answer',
+            'name',
+            'hint',
+            'position'
+        ));
+
+        $this->asserter()->assertResponsePropertyEquals($response, 'question', 'question');
+
 //        echo 'response: ';
 //        echo $response->getBody();
 //
@@ -83,10 +117,5 @@ class CardControllerTests extends ApiTestCase
         $this->assertEquals(201, $response->getStatusCode());
 
         $this->assertTrue($response->hasHeader('Location'));
-
-        // valid json...
-        $finishedData = json_decode($response->getBody(), true);
-        $this->assertArrayHasKey('question', $finishedData);
-        $this->assertEquals('test', $finishedData['name']);
     }
 }

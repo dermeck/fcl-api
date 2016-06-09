@@ -10,6 +10,8 @@ class ApiTestCase extends KernelTestCase
 {
     private static $staticClient;
 
+    private $responseAsserter;
+
     /**
      * @var Client
      */
@@ -54,5 +56,14 @@ class ApiTestCase extends KernelTestCase
     protected function getService($id)
     {
         return self::$kernel->getContainer()->get($id);
+    }
+
+    protected function asserter()
+    {
+        if($this->responseAsserter === null){
+            $this->responseAsserter = new ResponseAsserter();
+        }
+
+        return $this->responseAsserter;
     }
 }
