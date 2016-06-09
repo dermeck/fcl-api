@@ -51,7 +51,7 @@ class CardControllerTests extends ApiTestCase
 
     public function testGetSingle(){
         /** @var ResponseInterface $response */
-        $response = $this->client->get('/api/cards/' . $this->testCardId);
+        $response = $this->client->get('api/cards/' . $this->testCardId);
 //        echo $response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -70,7 +70,7 @@ class CardControllerTests extends ApiTestCase
     public function testGetCollection(){
 
         /** @var ResponseInterface $response */
-        $response = $this->client->get('/api/cards');
+        $response = $this->client->get('api/cards');
 //        echo $response->getBody();
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -91,7 +91,7 @@ class CardControllerTests extends ApiTestCase
         ];
 
         /** @var ResponseInterface $response */
-        $response = $this->client->post('/api/cards', [
+        $response = $this->client->post('api/cards', [
             'body' => json_encode($data)
         ]);
 

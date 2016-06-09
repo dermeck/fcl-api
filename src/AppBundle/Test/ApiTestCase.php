@@ -19,9 +19,11 @@ class ApiTestCase extends KernelTestCase
 
     public static function setUpBeforeClass()
     {
+        $baseUrl = getenv('TEST_BASE_URL'); // phpunit config
+
         // make sure the client is created just once
         self::$staticClient = new Client([
-            'base_uri' => 'http://localhost:8000',
+            'base_uri' => $baseUrl,
             'default' => [
                 'exceptions' => false,
             ]
